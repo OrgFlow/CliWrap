@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -236,7 +236,7 @@ namespace CliWrap
                 Arguments = Arguments,
                 RedirectStandardInput = StandardInputPipe is ParentProcessPipeSource ? false : true,
                 RedirectStandardOutput = StandardOutputPipe is ParentProcessPipeTarget ? false : true,
-                RedirectStandardError = StandardOutputPipe is ParentProcessPipeTarget ? false : true,
+                RedirectStandardError = StandardErrorPipe is ParentProcessPipeTarget ? false : true,
                 UseShellExecute = false,
                 CreateNoWindow = false
             };
