@@ -1,0 +1,45 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: UseDotNet@2
+  displayName: Install .NET
+  inputs:
+    packageType: sdk
+    version: 3.1.x
+- task: NuGetToolInstaller@1
+  displayName: Install NuGet
+- task: NuGetCommand@2
+  displayName: Restore packages
+  inputs:
+    command: restore
+    feedsToUse: config
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: CliWrap/*.csproj
+    arguments: --no-restore
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'CliWrap'
+    configuration: 'Release'
+    versioningScheme: 'off'
+- task: DotNetCoreCLI@2
+  displayName: Package
+  inputs:
+    command: pack
+    packagesToPack: CliWrap/*.csproj
+    packDirectory: $(Build.StagingDirectory)
+    arguments: --no-restore
+- task: NuGetCommand@2
+  displayName: Publish to internal feed
+  inputs:
+    command: push
+    packagesToPush: $(Build.StagingDirectory)/*.nupkg
+    nuGetFeedType: internal
+    publishVstsFeed: 91ecf41a-90a6-4208-8c02-068e1ffa3a4f/bf6ab5fe-d58c-4ad6-b41b-cef0a6c4479f
