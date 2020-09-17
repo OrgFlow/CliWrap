@@ -24,12 +24,6 @@ steps:
     projects: CliWrap/*.csproj
     arguments: --no-restore
 - task: DotNetCoreCLI@2
-  inputs:
-    command: 'pack'
-    packagesToPack: 'CliWrap'
-    configuration: 'Release'
-    versioningScheme: 'off'
-- task: DotNetCoreCLI@2
   displayName: Package
   inputs:
     command: pack
